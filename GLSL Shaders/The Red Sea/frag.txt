@@ -1,0 +1,230 @@
+#version 330 core
+//Originally from ShaderToy: https://www.shadertoy.com/view/Wl2GDh
+
+//==XELA SHADER EMULATION==
+
+#define iTime time
+#define iResolution resolution
+#define iChannel0 chan0.tex
+#define iChannel1 chan1.tex
+#define iChannel2 chan2.tex
+#define iChannel3 chan3.tex
+
+struct Texture {
+	sampler2D tex;
+	vec2 resolution;
+};
+
+uniform float time;
+uniform vec2 resolution;
+uniform vec2 offset;
+uniform Texture chan0;
+uniform Texture chan1;
+uniform Texture chan2;
+uniform Texture chan3;
+
+out vec4 FragColor;
+
+//random function https://thebookofshaders.com/10/
+float rnd(vec2 p)
+{
+ return fract(sin(dot(p, vec2(12.9898, 78.233)))*43562.1343523);   
+}
+
+//==SHADERTOY SHADER==
+
+// "wave" function creates a basic wave 
+//p = position, 
+//h = height, 
+//f = wave frequency, 
+//amp = wave amplitude 
+float wave(vec2 p, float h, float f, float amp)
+{
+    p.y+=sin(p.x*f+iTime*2.)/amp;//+0.2; //shifts y
+    float wave = 1.0-smoothstep( h, h+0.005, p.y);
+    //float waveedge = 1.0- (wave+step(s+0.2, p.y));
+    return clamp(wave, 0., 1.);
+}
+
+
+// "waveedge" function creates edge for basic wave 
+//p = position, 
+//h = height, 
+//f = wave frequency, 
+//amp = wave amplitude 
+float waveedge(vec2 p, float h, float f, float amp)
+{
+    p.y+=sin(p.x*f+iTime*2.)/amp;
+    float wave = smoothstep(p.y, p.y+0.005, h);
+    float waveedge = 1.0- (wave+smoothstep(h, h+0.005, p.y));
+    return waveedge;
+}
+
+
+// "line" function creates wave lines
+//p = position, 
+//s = height, 
+//f = wave frequency, 
+//amp = wave amplitude 
+//h = height
+//th = line thickness!
+
+float lines(vec2 p, float h,float f, float amp, float th, float num)
+{
+    p.y+=sin(p.x*f+iTime*2.)/amp-0.;
+    float wavelines = smoothstep(th,th+0.2, abs(sin(p.y*num)));
+    float linecut = wavelines - smoothstep(h,h+0.00, p.y);
+    
+    //I had to add texture to the waves here or else the teextures move
+    //at a different timing and it looks wierd
+    //I had to multiply p by a large value or the texture doesn't fill the
+    //lines properly
+    //I had to multiply instead of add because, well try adding it's
+    //actually pretty cool.
+    return max(linecut, 0.0)*vec3(texture(iChannel2, p*20.)).x*2.1;
+}
+
+
+//clamps are added to prevent negative numbers.
+
+vec3 makeWaves(vec2 p)
+{
+    
+    //making the sky here because this function returns the initial col
+    //so nothing can be added behind it, as far as I know.
+    
+    //everything I write is only as far as I know by the way.
+    
+    vec3 col = vec3(.0)+texture(iChannel1, vec2(p.x+iTime/4., p.y)).x*p.y/20.;
+    col+=vec3(55., 5., 5.)/255.*pow(texture(iChannel3, vec2(p.x+iTime/8., p.y)).x, 20.0)*1.3;
+    col+=vec3(102., 15., 5.)/255.*pow(texture(iChannel0, vec2(p.x+iTime/16., p.y)).x, 10.0)*2.;
+    
+    p.y+=0.5; //p.y+=0.3;
+    //p.y+=sin(p.x*4.-1.2)/4.;
+    p.y+=sin(p.x*7.-1.2+iTime)/14.;
+    
+
+    //initial wave variables, height, frequency, amplitude, 
+    //line thickness, line number
+    float h = 0.99;
+    float f = 8.;
+    float amp = 9.;
+    float th = 0.2;
+    float num = 200.;
+    
+    //creating a wave, an edge line, and inner lines
+    float w = wave(p, h, f, amp);
+    float we = waveedge(p, h, f, amp);
+    float l = lines(p, h, f, amp, th, num);
+   
+
+    //going for 20 waves total
+    for(float i = 1.0 ; i<20. ; i++){  
+        
+        //random seed to make waves different
+        float seed = rnd(vec2(i))*100.;
+    	h-=i/300.; //random scaleing of i and then subtracting to lower the waves a bit
+    	f=seed/6.+2.;//using seed to help create variation in wave frequency
+    	num=250.-seed*1.; //seed for variation in number of inner lines
+    	float th2 = th+f/45.; //using frequency(which has the seed applied to it) 
+        //to createrandomess in line thickness, jsut a tiny bit actually
+
+            
+      	vec3 gold = vec3(202., 165., 55.)/255. //a nice gold color from the internet
+        *texture(iChannel0, vec2(p.x+seed, p.y)/6.).x*1.2;//mult by the first texture to give
+        //it a more metallic look.
+        
+
+		//creating a wave, an edge line, and inner lines that MIGHT be used 
+    	//depending on the seed being > 25.
+        
+        //these are only used at the end of the function, this part
+        //could be done more simply and I wouldn't need an w2, we2, or l2 at all.
+      	
+    	float w2 = wave(p, h, f, amp);  
+    	float we2 = waveedge(p, h, f, amp);
+    	float l2 = lines(p, h, f, amp, th2, num);
+        
+
+	//adding a wave to the scene
+    col = mix(clamp(col, 0., 1.), vec3(0.4, .0, .0)*p.y*0.9, clamp(w, 0.0, 1.0));
+    
+    //adding a gold edge to the scene were the wave is    
+    col = mix(clamp(col, 0., 1.), gold, we);
+        
+        if(seed > 35.)
+        {
+            //adding golden inner lines to the wave only 1/4 of the time
+            col = mix(clamp(col, 0.0, 1.0), vec3(gold),l); 
+        }
+       
+        
+    //this is not nessesary but it basically holds the wave, edge and line of each previous
+    //for loop. I was using as part of a stratety for adding waves to the 
+    //scene with different opacity amounts, but it's not nessesary any more
+    //but I keep it just to not have to make any more adjustments
+    w = w2;
+    we = we2;
+    l = l2;
+       
+       
+    
+    }
+    
+    return col;
+    
+}
+
+float makeMoon(vec2 p)
+{
+    float moon =1.0-smoothstep(0.1, 0.105,length(vec2(p.x-1.5, p.y-0.82))); 
+    
+    															  //clamping the sin so I get a nice 
+    															  //pause at the cresent
+    float space =1.0-smoothstep(0.1, 0.105,length(vec2(p.x-1.55-  clamp(sin(iTime/5.)/5., 0.0, 1.0), p.y-0.82))); 
+
+ return    clamp(moon-space, 0.0, 1.0);
+}
+
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = fragCoord/iResolution.xy;
+    vec2 st = uv;//for vignetting
+    
+
+    vec3 col = vec3(.1);//*texture(iChannel1, uv).x*uv.y;// 0.5 + 0.5*cos(iTime+uv.xyx+vec3(0,2,4));
+    vec3 gold = vec3(202., 165., 55.)/255.;
+
+    //creates all the waves AND the sky since its behind the waves and the waves
+    //return most of the color for the whole scene.
+    col = makeWaves(uv);
+    
+    //creates a full move and a moving circle that subtracts from it to create
+    //the moon animation
+    vec3 moonCol = vec3(202., 165., 55.)/255.*texture(iChannel1, vec2(uv.x+sin(iTime*14.)/200., uv.y)).x;
+    
+    //I find I only needed to change resolution for the creation of the
+    //moove because it needs to be a circle so I put this at the very end.
+    //usually you would do this at the start of the scene but because I didn't 
+    //I only felt like tacking it on later.
+    uv.x*=iResolution.x/iResolution.y;
+    col = mix(col, moonCol, makeMoon(uv) );
+    
+    
+    //vignetting using a copy of uv from the top of main to keep the dimentions.
+    st *=  1.0 - st.yx;
+    float vig =st.x*st.y*15.;
+    vig = pow(vig, 0.25);
+    
+    
+    // Output to screen
+    fragColor = vec4(col*2.*vig,1.0);
+}
+
+//==END SHADERTOY SHADER==
+
+void main() {
+	mainImage(FragColor, gl_FragCoord.xy - offset.xy);
+}

@@ -1,0 +1,11 @@
+VertexShader vert.txt
+FragmentShader frag.txt
+Texture chan0=chan0.png
+Texture chan1=chan1.png
+Texture chan2=chan2.png
+Texture chan3=chan3.png
+Monitor 1
+Monitor 2
+Monitor 3
+FPS 30
+HideConsole false
