@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Engine">
+      <UniqueIdentifier>{e89ec08e-a5df-4b1d-93fe-c242a36479f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine">
+      <UniqueIdentifier>{d2583922-9ffc-460f-90f1-0b0af2e68854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Data">
+      <UniqueIdentifier>{989ffde1-eb29-4dd3-864b-4f7ee594eb10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Graphics">
+      <UniqueIdentifier>{5e9d59a8-09fc-4852-bdcd-b54a00ad0f32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Data">
+      <UniqueIdentifier>{c5ba324f-4068-45f3-86d9-851b1c120d07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Engine\Graphics">
+      <UniqueIdentifier>{d047dc94-1738-4e6a-929f-ea76562e65b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\XelaShaders">
+      <UniqueIdentifier>{9835f0e8-0fcc-412b-8dae-413b23282177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\XelaShaders">
+      <UniqueIdentifier>{769968dd-7380-42e5-adbf-dc953c725dbc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="XelaInit.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="XelaCallbacks.cpp">
+      <Filter>Source Files\Engine\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="XelaDefinitions.cpp">
+      <Filter>Source Files\Engine\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="XelaEvents.cpp">
+      <Filter>Source Files\Engine\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="XelaObject.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="XelaShader.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="XelaWindow.cpp">
+      <Filter>Source Files\Engine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformCode.cpp">
+      <Filter>Source Files\XelaShaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderHandler.cpp">
+      <Filter>Source Files\XelaShaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files\XelaShaders</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="XelaCallbacks.h">
+      <Filter>Header Files\Engine\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="XelaDefinitions.h">
+      <Filter>Header Files\Engine\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="XelaEvents.h">
+      <Filter>Header Files\Engine\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="XelaInit.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="XelaObject.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="XelaShader.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="XelaWindow.h">
+      <Filter>Header Files\Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>Header Files\XelaShaders</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformCode.h">
+      <Filter>Header Files\XelaShaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderHandler.h">
+      <Filter>Header Files\XelaShaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
