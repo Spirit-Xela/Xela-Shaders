@@ -5,7 +5,9 @@ A simple program that displays GLSL shaders as a Windows desktop background
 
 This section explains how to setup a compiled version of XelaShaders to use.
 
-1. 
+1. Above the list of files in the code viewer, select the releases tab.
+2. Download the latest release zip file and extract it into its own folder.
+3. Run XelaShaders.exe and provide the path to a shader folder. Synth Waves is provided as an example.
 
 ## Setup IDE
 
