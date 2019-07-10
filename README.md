@@ -27,10 +27,8 @@ These instructions will get you a copy of the project up and running on your loc
 4. Under solution explorer on the right, right-click the project XelaShaders and select properties.
 5. Go to C/C++ -> General
 6. Edit Additional Include Directories and add the paths to the GLFW and GLEW include folders.
-STEP 6 IMAGE
 7. Go to Liner -> General
 8. Edit Additional Library Directories and add the paths to the GLFW and GLEW library folders.
-STEP 8 IMAGE
 9. Go to Linker -> Input
 10. Edit Additional Dependencies and add the following:
   * opengl32.lib
